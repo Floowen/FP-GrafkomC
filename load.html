@@ -1,7 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OBJ File Loader</title>
+    <title>Rumah Lamin</title>
+    <style>
+        body {
+            color: rgb(236, 236, 236);
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2e2e2e;
+        }
+        button {
+            background-color: #3778e2; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #2e2e2e;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #242424;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%; /* Could be more or less, depending on screen size */
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: rgb(33, 148, 225);
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +79,61 @@
 
 </head>
 <body>
+    <div class="menu">
+        <p><b>Spotlight Position Control</b></p>
+        <label for="spotlightSliderX">X Position</label>
+        <input type="range" id="spotlightSliderX" min="-100" max="100" value="50">
+        <br>
+        <label for="spotlightSliderY">Y Position</label>
+        <input type="range" id="spotlightSliderY" min="-100" max="100" value="50">
+        <br>
+        <label for="spotlightSliderZ">Z Position</label>
+        <input type="range" id="spotlightSliderZ" min="-100" max="100" value="50">
+        <br>
+        <br>
+        <p><b>Spotlight Control</b></p>
+        <label for="spotlightColor">Color</label>
+        <input type="color" id="spotlightColor" value="#ff0000">
+        <label for="spotlightIntensity">Intensity</label>
+        <input type="range" id="spotlightIntensity" min="0" max="10" step="0.1" value="5">
+        <p><b>Ambient Light Control</b></p>
+        <label for="ambientLightColor">Color</label>
+        <input type="color" id="ambientLightColor" value="#ffffff">
+        <label for="ambientLightIntensity">Intensity</label>
+        <input type="range" id="ambientLightIntensity" min="-3" max="10" step="0.1" value="2">
+        <br>
+        <p><b>World Light Control</b></p>
+        <label for="worldlightColor">Color</label>
+        <input type="color" id="worldlightColor" value="#001142">
+        <label for="worldlightIntensity">Intensity</label>
+        <input type="range" id="worldlightIntensity" min="-3" max="10" step="0.1" value="2">
+        <br>
+        <p><b>Camera Control</b></p>
+        <label for="autoOrbit">Auto Orbit</label>
+        <input type="checkbox" id="autoOrbit">
+        <br>
+        <label for="rotateSpeed">Rotation Speed</label>
+        <input type="range" id="rotateSpeed" min="1" max="10" step="0.1" value="1">
+        <br><br>
+        <button id="openModalBtn"><b>About Rumah Lamin</b></button>
+        <br>
+        <p><b>Kelompok :</b></p>
+        <span>
+            Muhammad Ariandra Dwiratama<br>
+            Rafli Syahputra Pane<br>
+            Muhammad MIrza Ralfie Prasetyo<br>
+        </span>
+    </div>
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>Rumah Lamin adalah rumah adat dari Kalimantan Timur. Rumah Lamin juga dikenal sebagai rumah panggung yang panjang dari sambung menyambung. Rumah ini dapat ditinggal oleh beberapa keluarga karena ukuran rumah yang cukup besar. Pada tahun 1967, rumah Lamin diresmikan oleh pemerintah Indonesia.</p>
+          <p>Rumah Lamin mempunyai warna khas yang dipakai untuk menghias badan rumah. Warna khas itu adalah warna kuning dan hitam. Warna kuning melambangkan kewibawaan dan warna putih melambangkan kebersihan jiwa.</p>
+          <p>Rumah Lamin dibuat dari kayu. Kayu yang digunakan untuk membuat rumah Lamin adalah kayu Ulin. Kayu ini dikenal oleh masyarakat Dayak dengan nama kayu besi.
+          Konon, apabila kayu ulin terkena air maka kayu ini akan semakin keras. Hal ini terbukti dari lamanya usia rumah Lamin yang dibuat dengan menggunakan kayu ulin.</p>
+        </div>
+      </div>
     
     <script>
         let scene, camera, renderer;
@@ -33,10 +149,10 @@
         light.position.set(0, 1, 0);
         scene.add(light);
 
-        // var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-        // directionalLight.position.set( 0, 1, 0 ).normalize();
-        // directionalLight.castShadow = true;
-        // scene.add( directionalLight );
+        var directionalLight = new THREE.DirectionalLight( 0x001142 );
+        directionalLight.position.set( 0, 1, 0 ).normalize();
+        directionalLight.castShadow = true;
+        scene.add( directionalLight );
 
         var pointLight = new THREE.PointLight(0xff0000, 5, 100);
         pointLight.position.set(50, 50, 50);
@@ -72,13 +188,93 @@
         pointLight.shadow.mapSize.height = 1024;
 
         controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.addEventListener('change', renderer);
+        controls.target.set(50, 10, -30);
+
+        document.getElementById('autoOrbit').addEventListener('change', function (event) {
+            controls.autoRotate = event.target.checked;
+            document.getElementById('rotateSpeed').addEventListener('input', function (event) {
+                var value = event.target.value;
+                controls.autoRotateSpeed = value;
+            });
+        });
 
         animate();
 
         function animate() {
-            renderer.render( scene, camera );
             requestAnimationFrame( animate );
+            controls.update();
+            renderer.render( scene, camera );
+        }
+
+        document.getElementById('spotlightSliderX').addEventListener('input', function (event) {
+            var value = event.target.value;
+            pointLight.position.x = value;
+        });
+
+        document.getElementById('spotlightSliderY').addEventListener('input', function (event) {
+            var value = event.target.value;
+            pointLight.position.y = value;
+        });
+
+        document.getElementById('spotlightSliderZ').addEventListener('input', function (event) {
+            var value = event.target.value;
+            pointLight.position.z = value;
+        });
+
+        document.getElementById('spotlightColor').addEventListener('input', function (event) {
+            var color = event.target.value;
+            pointLight.color.set(color);
+        });
+
+        document.getElementById('spotlightIntensity').addEventListener('input', function (event) {
+            var intensity = event.target.value;
+            pointLight.intensity = intensity;
+        });
+
+        document.getElementById('ambientLightColor').addEventListener('input', function (event) {
+            var color = event.target.value;
+            light.color.set(color);
+        });
+
+        document.getElementById('ambientLightIntensity').addEventListener('input', function (event) {
+            var intensity = event.target.value;
+            light.intensity = intensity;
+        });
+
+        document.getElementById('worldlightColor').addEventListener('input', function (event) {
+            var color = event.target.value;
+            directionalLight.color.set(color);
+        });
+
+        document.getElementById('worldlightIntensity').addEventListener('input', function (event) {
+            var intensity = event.target.value;
+            directionalLight.intensity = intensity;
+        });
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("openModalBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
 
     </script>
